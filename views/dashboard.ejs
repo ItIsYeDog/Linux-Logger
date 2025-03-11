@@ -57,20 +57,31 @@
                 <p>Uptime: <%= Math.floor(systemInfo.uptime / 3600) %>h <%= Math.floor((systemInfo.uptime % 3600) / 60) %>m</p>
             </div>
 
-            <div class="metric-card disk-usage">
-                <h2>Disk Usage</h2>
-                <% systemInfo.disks.forEach(disk => { %>
-                    <div class="disk-info">
-                        <h3><%= disk.mounted %></h3>
-                        <div class="disk-bar">
-                            <div class="disk-used" style="width: <%= disk.usedPercentage %>%"></div>
-                        </div>
-                        <p>Total: <%= (disk.size / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
-                        <p>Used: <%= (disk.used / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
-                        <p>Available: <%= (disk.available / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
-                        <p>Usage: <%= disk.usedPercentage %>%</p>
+            <div class="metric-card disk-performance">
+                <h2>Disk Performance</h2>
+                <div class="disk-stats">
+                    <div class="stat-group">
+                        <h3>I/O Activity</h3>
+                        <p>Total Read: <%= systemInfo.diskIO?.totalRead || '0' %> MB</p>
+                        <p>Total Write: <%= systemInfo.diskIO?.totalWrite || '0' %> MB</p>
+                        <p>Reads/sec: <%= systemInfo.diskIO?.readsPerSecond || '0' %></p>
+                        <p>Writes/sec: <%= systemInfo.diskIO?.writesPerSecond || '0' %></p>
                     </div>
-                <% }); %>
+                    
+                    <div class="filesystem-list">
+                        <h3>Filesystems</h3>
+                        <% (systemInfo.diskIO?.filesystems || []).forEach(fs => { %>
+                            <div class="filesystem-item">
+                                <p class="fs-mount"><%= fs.mount %> (<%= fs.type %>)</p>
+                                <div class="fs-stats">
+                                    <span>Size: <%= fs.size %> GB</span>
+                                    <span>Used: <%= fs.used %> GB</span>
+                                    <span>Available: <%= fs.available %> GB</span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

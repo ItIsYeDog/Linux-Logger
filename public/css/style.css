@@ -1,71 +1,11 @@
-.login-container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-    width: 100%;
-}
-
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
     background-color: #f0f2f5;
 }
 
-.form-group {
-    margin-bottom: 15px;
-}
-
-input {
-    padding: 8px;
-    width: 100%;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    width: 100%;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-.error {
-    color: red;
-    margin-bottom: 10px;
-}
-
-.dashboard {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.metric-card {
-    background: white;
-    padding: 20px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-h1, h2 {
-    color: #333;
-}
-
+/* Dashboard layout */
 .dashboard {
     max-width: 1200px;
     margin: 0 auto;
@@ -79,11 +19,18 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
 .refresh-text {
     color: #666;
     font-size: 0.9em;
 }
 
+/* Metric cards */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -98,6 +45,18 @@ h1, h2 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.metric-card h2 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.metric-card p {
+    margin: 8px 0;
+    color: #666;
+}
+
+/* Memory usage */
 .memory-bar {
     width: 100%;
     height: 20px;
@@ -113,18 +72,88 @@ h1, h2 {
     transition: width 0.3s ease;
 }
 
-.metric-card h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: #333;
-    font-size: 1.2em;
+/* Disk performance section */
+.disk-performance {
+    grid-column: 1 / -1;
 }
 
-.metric-card p {
-    margin: 8px 0;
+.disk-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.stat-group, .filesystem-list {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.filesystem-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.filesystem-item:last-child {
+    border-bottom: none;
+}
+
+.fs-mount {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.fs-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9em;
     color: #666;
 }
 
+/* Documentation styles */
+.docs-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.docs-nav {
+    margin-bottom: 30px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.docs-section {
+    margin-bottom: 40px;
+}
+
+.docs-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #4CAF50;
+}
+
+/* Links and buttons */
+.docs-link, .nav-link {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: 500;
+    padding: 8px 16px;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+}
+
+.docs-link:hover, .nav-link:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Error page */
 .error-container {
     max-width: 800px;
     margin: 50px auto;
@@ -144,26 +173,13 @@ h1, h2 {
     border-radius: 4px;
 }
 
-.error-stack {
-    text-align: left;
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 4px;
-    margin: 20px 0;
-    overflow-x: auto;
-}
-
-.error-stack pre {
-    margin: 0;
-    font-family: monospace;
-    font-size: 14px;
-}
-
+/* Logs page */
 .logs-container {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
 }
+
 .log-section {
     background: white;
     padding: 20px;
@@ -171,153 +187,34 @@ h1, h2 {
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
 .log-entry {
     padding: 10px;
     border-bottom: 1px solid #eee;
     font-family: monospace;
     white-space: pre-wrap;
 }
-.log-entry:hover {
-    background: #f5f5f5;
-}
-.timestamp {
-    color: #666;
-    font-size: 0.9em;
-}
+
 .tab-container {
     margin-bottom: 20px;
 }
+
 .tab {
     padding: 10px 20px;
     border: none;
     background: #f0f2f5;
     cursor: pointer;
 }
+
 .tab.active {
     background: #4CAF50;
     color: white;
 }
+
 .log-content {
     display: none;
 }
+
 .log-content.active {
     display: block;
-}
-
-.disk-usage {
-    grid-column: 1 / -1;
-}
-
-.disk-info {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.disk-info:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.disk-bar {
-    width: 100%;
-    height: 20px;
-    background: #f0f0f0;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 10px 0;
-}
-
-.disk-used {
-    height: 100%;
-    background: linear-gradient(90deg, #4CAF50, #45a049);
-    transition: width 0.3s ease;
-}
-
-.disk-info h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.1em;
-    color: #444;
-}
-
-.disk-info p {
-    margin: 5px 0;
-    font-size: 0.9em;
-}
-
-.docs-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.docs-nav {
-    margin-bottom: 30px;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: #4CAF50;
-    font-weight: 500;
-}
-
-.nav-link:hover {
-    text-decoration: underline;
-}
-
-.docs-section {
-    margin-bottom: 40px;
-}
-
-.docs-section h2 {
-    color: #333;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #4CAF50;
-}
-
-.docs-section h3 {
-    color: #444;
-    margin: 20px 0 10px 0;
-}
-
-.docs-section ul {
-    padding-left: 20px;
-    margin: 10px 0;
-}
-
-.docs-section li {
-    margin: 8px 0;
-    line-height: 1.5;
-}
-
-.docs-section p {
-    line-height: 1.6;
-    color: #666;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.docs-link {
-    text-decoration: none;
-    color: #4CAF50;
-    font-weight: 500;
-    padding: 8px 16px;
-    border: 1px solid #4CAF50;
-    border-radius: 4px;
-}
-
-.docs-link:hover {
-    background-color: #4CAF50;
-    color: white;
 }

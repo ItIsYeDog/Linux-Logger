@@ -1,6 +1,6 @@
 const os = require('os');
 const logger = require('./logger');
-const nodeDiskInfo = require('node-disk-info');
+const si = require('systeminformation');
 
 exports.getSystemMetrics = async () => {
     try {
@@ -17,16 +17,41 @@ exports.getSystemMetrics = async () => {
 
         const cpuLoad = 100 - (totalIdle / totalTick * 100);
         
-        const disks = await nodeDiskInfo.getDiskInfo();
-        const diskMetrics = disks.map(disk => ({
-            filesystem: disk.filesystem,
-            mounted: disk.mounted,
-            size: disk.blocks,
-            used: disk.used,
-            available: disk.available,
-            usedPercentage: disk.capacity,
-            type: disk.type
-        }));
+        let diskMetrics = {
+            totalRead: '0',
+            totalWrite: '0',
+            readsPerSecond: 0,
+            writesPerSecond: 0,
+            filesystems: []
+        };
+
+        try {
+            const [diskIO, fsSize] = await Promise.all([
+                si.disksIO(),
+                si.fsSize()
+            ]);
+
+            diskMetrics = {
+                totalRead: diskIO && typeof diskIO.totalRead === 'number' 
+                    ? (diskIO.totalRead / (1024 * 1024)).toFixed(2)
+                    : '0',
+                totalWrite: diskIO && typeof diskIO.totalWrite === 'number'
+                    ? (diskIO.totalWrite / (1024 * 1024)).toFixed(2)
+                    : '0',
+                readsPerSecond: diskIO?.rIO || 0,
+                writesPerSecond: diskIO?.wIO || 0,
+                filesystems: fsSize.map(fs => ({
+                    fs: fs.fs,
+                    type: fs.type,
+                    mount: fs.mount,
+                    size: (fs.size / (1024 * 1024 * 1024)).toFixed(2),
+                    used: (fs.used / (1024 * 1024 * 1024)).toFixed(2),
+                    available: (fs.available / (1024 * 1024 * 1024)).toFixed(2)
+                }))
+            };
+        } catch (diskError) {
+            logger.error('Error getting disk metrics', { error: diskError.message });
+        }
 
         const metrics = {
             cpuUsage: process.cpuUsage(),
@@ -37,7 +62,7 @@ exports.getSystemMetrics = async () => {
             cpuCores: os.cpus().length,
             cpuLoad: cpuLoad,
             nodeMemory: process.memoryUsage(),
-            disks: diskMetrics,
+            diskIO: diskMetrics,
             timestamp: new Date().toISOString()
         };
 
