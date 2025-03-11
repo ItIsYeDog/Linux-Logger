@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        setTimeout(() => {
+            window.location.reload();
+        }, 60000);
+
+        setInterval(() => {
+            const counter = document.getElementById('refresh-counter');
+            const currentTime = parseInt(counter.textContent);
+            if (currentTime > 0) {
+                counter.textContent = currentTime - 1;
+            }
+        }, 1000);
+    </script>
+</head>
+<body style="display: block;">
+    <div class="dashboard">
+        <div class="header-section">
+            <h1>System Metrics Dashboard</h1>
+            <p class="refresh-text">Refreshing in <span id="refresh-counter">60</span>s</p>
+        </div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h2>Memory Usage</h2>
+                <div class="memory-bar">
+                    <div class="memory-used" style="width: <%= ((systemInfo.totalMemory - systemInfo.freeMemory) / systemInfo.totalMemory * 100).toFixed(1) %>%"></div>
+                </div>
+                <p>Total Memory: <%= (systemInfo.totalMemory / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+                <p>Free Memory: <%= (systemInfo.freeMemory / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+                <p>Used Memory: <%= ((systemInfo.totalMemory - systemInfo.freeMemory) / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+            </div>
+
+            <div class="metric-card">
+                <h2>Node.js Process Info</h2>
+                <p>Memory Usage: <%= (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2) %> MB</p>
+                <p>Heap Total: <%= (process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2) %> MB</p>
+                <p>External Memory: <%= (process.memoryUsage().external / 1024 / 1024).toFixed(2) %> MB</p>
+            </div>
+
+            <div class="metric-card">
+                <h2>CPU Information</h2>
+                <p>CPU Cores: <%= systemInfo.cpuCores %></p>
+                <p>CPU Load: <%= systemInfo.cpuLoad.toFixed(2) %>%</p>
+            </div>
+
+            <div class="metric-card">
+                <h2>System Information</h2>
+                <p>Platform: <%= systemInfo.platform %></p>
+                <p>Uptime: <%= Math.floor(systemInfo.uptime / 3600) %>h <%= Math.floor((systemInfo.uptime % 3600) / 60) %>m</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

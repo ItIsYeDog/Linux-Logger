@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Logs</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="display: block;">
+    <div class="logs-container">
+        <h1>System Logs</h1>
+        <div class="tab-container">
+            <button class="tab active" onclick="showTab('metrics')">Metrics Logs</button>
+            <button class="tab" onclick="showTab('errors')">Error Logs</button>
+        </div>
+
+        <div id="metrics" class="log-content active">
+            <div class="log-section">
+                <h2>Metrics Logs</h2>
+                <% metrics.reverse().forEach(log => { %>
+                    <div class="log-entry">
+                        <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
+                        <pre><%= JSON.stringify(log, null, 2) %></pre>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <div id="errors" class="log-content">
+            <div class="log-section">
+                <h2>Error Logs</h2>
+                <% errors.reverse().forEach(log => { %>
+                    <div class="log-entry">
+                        <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
+                        <pre><%= JSON.stringify(log, null, 2) %></pre>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.log-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
