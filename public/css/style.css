@@ -203,3 +203,45 @@ h1, h2 {
 .log-content.active {
     display: block;
 }
+
+.disk-usage {
+    grid-column: 1 / -1;
+}
+
+.disk-info {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.disk-info:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.disk-bar {
+    width: 100%;
+    height: 20px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.disk-used {
+    height: 100%;
+    background: linear-gradient(90deg, #4CAF50, #45a049);
+    transition: width 0.3s ease;
+}
+
+.disk-info h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+    color: #444;
+}
+
+.disk-info p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}

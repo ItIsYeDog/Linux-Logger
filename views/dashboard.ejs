@@ -53,6 +53,22 @@
                 <p>Platform: <%= systemInfo.platform %></p>
                 <p>Uptime: <%= Math.floor(systemInfo.uptime / 3600) %>h <%= Math.floor((systemInfo.uptime % 3600) / 60) %>m</p>
             </div>
+            
+            <div class="metric-card disk-usage">
+                <h2>Disk Usage</h2>
+                <% systemInfo.disks.forEach(disk => { %>
+                    <div class="disk-info">
+                        <h3><%= disk.mounted %></h3>
+                        <div class="disk-bar">
+                            <div class="disk-used" style="width: <%= disk.usedPercentage %>%"></div>
+                        </div>
+                        <p>Total: <%= (disk.size / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+                        <p>Used: <%= (disk.used / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+                        <p>Available: <%= (disk.available / 1024 / 1024 / 1024).toFixed(2) %> GB</p>
+                        <p>Usage: <%= disk.usedPercentage %>%</p>
+                    </div>
+                <% }); %>
+            </div>
         </div>
     </div>
 </body>

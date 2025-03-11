@@ -3,7 +3,7 @@ const logger = require('../Utils/logger');
 
 exports.getDashboard = async (req, res) => {
     try {
-        const systemInfo = getSystemMetrics();
+        const systemInfo = await getSystemMetrics();
         logger.info('Dashboard accessed', {
             ip: req.ip,
             userAgent: req.headers['user-agent']
@@ -24,7 +24,7 @@ exports.getDashboard = async (req, res) => {
 
 exports.getMetricsData = async (req, res) => {
     try {
-        const systemInfo = getSystemMetrics();
+        const systemInfo = await getSystemMetrics();
         res.json({
             success: true,
             data: systemInfo
