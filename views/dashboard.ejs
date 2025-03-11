@@ -3,19 +3,6 @@
 <head>
     <title>System Dashboard</title>
     <link rel="stylesheet" href="/css/style.css">
-    <script>
-        setTimeout(() => {
-            window.location.reload();
-        }, 60000);
-
-        setInterval(() => {
-            const counter = document.getElementById('refresh-counter');
-            const currentTime = parseInt(counter.textContent);
-            if (currentTime > 0) {
-                counter.textContent = currentTime - 1;
-            }
-        }, 1000);
-    </script>
 </head>
 <body style="display: block;">
     <div class="dashboard">
@@ -48,7 +35,7 @@
             <div class="metric-card">
                 <h2>CPU Information</h2>
                 <p>CPU Cores: <%= systemInfo.cpuCores %></p>
-                <p>CPU Load: <%= systemInfo.cpuLoad.toFixed(2) %>%</p>
+                <p>CPU Load: <span id="cpu-load"><%= systemInfo.cpuLoad.toFixed(2) %></span>%</p>
             </div>
 
             <div class="metric-card">
@@ -62,8 +49,8 @@
                 <div class="disk-stats">
                     <div class="stat-group">
                         <h3>I/O Activity</h3>
-                        <p>Total Read: <%= systemInfo.diskIO?.totalRead || '0' %> MB</p>
-                        <p>Total Write: <%= systemInfo.diskIO?.totalWrite || '0' %> MB</p>
+                        <p>Total Read: <span id="disk-read"><%= systemInfo.diskIO?.totalRead || '0' %></span> MB</p>
+                        <p>Total Write: <span id="disk-write"><%= systemInfo.diskIO?.totalWrite || '0' %></span> MB</p>
                         <p>Reads/sec: <%= systemInfo.diskIO?.readsPerSecond || '0' %></p>
                         <p>Writes/sec: <%= systemInfo.diskIO?.writesPerSecond || '0' %></p>
                     </div>
@@ -85,5 +72,59 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const UPDATE_INTERVAL = 30000; // 30 sekunder
+        const METRICS_ENDPOINT = '/dashboard/metrics';
+    
+        async function updateMetrics() {
+            try {
+                const response = await fetch(METRICS_ENDPOINT);
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateDashboardValues(data.data);
+                    updateRefreshCounter();
+                }
+            } catch (error) {
+                console.error('Failed to update metrics:', error);
+            }
+        }
+    
+        function updateDashboardValues(metrics) {
+            // Minnebruk
+            document.querySelector('.memory-used').style.width = 
+                `${((metrics.totalMemory - metrics.freeMemory) / metrics.totalMemory * 100).toFixed(1)}%`;
+            
+            // CPU
+            document.querySelector('#cpu-load').textContent = 
+                `${metrics.cpuLoad.toFixed(2)}%`;
+                
+            // Disk I/O
+            document.querySelector('#disk-read').textContent = 
+                `${metrics.diskIO?.totalRead || '0'} MB`;
+            document.querySelector('#disk-write').textContent = 
+                `${metrics.diskIO?.totalWrite || '0'} MB`;
+        }
+    
+        function updateRefreshCounter() {
+            let timeLeft = UPDATE_INTERVAL / 1000;
+            const counter = document.getElementById('refresh-counter');
+            
+            counter.textContent = timeLeft;
+            
+            const countdown = setInterval(() => {
+                timeLeft -= 1;
+                counter.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                }
+            }, 1000);
+        }
+    
+        setInterval(updateMetrics, UPDATE_INTERVAL);
+        updateRefreshCounter();
+    </script>
 </body>
 </html>
