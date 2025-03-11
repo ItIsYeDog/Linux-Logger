@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dokumentasjon - Linux Prosess Monitor</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="display: block;">
+    <div class="docs-container">
+        <nav class="docs-nav">
+            <a href="/dashboard" class="nav-link">← Tilbake til Dashboard</a>
+        </nav>
+        
+        <div class="docs-content">
+            <h1>Linux Prosess Monitor - Dokumentasjon</h1>
+            
+            <section class="docs-section">
+                <h2>Oversikt</h2>
+                <p>
+                    Dette er en applikasjon som overvåker systemressurser på Linux-systemer. 
+                    Den viser sanntidsinformasjon om:
+                </p>
+                <ul>
+                    <li>CPU-bruk og belastning</li>
+                    <li>Minnebruk (RAM)</li>
+                    <li>Diskbruk og lagring</li>
+                    <li>Node.js prosessinformasjon</li>
+                    <li>Systemlogging</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>Hovedfunksjoner</h2>
+                
+                <h3>Dashboard (/dashboard)</h3>
+                <p>
+                    Hovedsiden viser sanntidsdata om systemet:
+                </p>
+                <ul>
+                    <li>Minnebruk med visuell indikator</li>
+                    <li>CPU-informasjon og belastning</li>
+                    <li>Diskbruk for alle monterte disker</li>
+                    <li>Node.js prosessdata</li>
+                </ul>
+
+                <h3>Logger (/logs)</h3>
+                <p>
+                    Loggsiden viser to typer logger:
+                </p>
+                <ul>
+                    <li>Metrikklogger: Systemstatistikk over tid</li>
+                    <li>Feillogger: Eventuelle systemfeil og advarsler</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>Teknisk Informasjon</h2>
+                
+                <h3>Oppdateringsfrekvens</h3>
+                <p>
+                    Dashboard oppdateres automatisk hvert minutt for å vise ferske data.
+                    En nedtelling viser tid til neste oppdatering.
+                </p>
+
+                <h3>Systemkrav</h3>
+                <ul>
+                    <li>Node.js v14 eller nyere</li>
+                    <li>Linux-basert operativsystem</li>
+                    <li>Tilstrekkelige rettigheter for systemovervåking</li>
+                </ul>
+            </section>
+
+            <section class="docs-section">
+                <h2>Feilsøking</h2>
+                <p>
+                    Vanlige problemer og løsninger:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Manglende diskdata:</strong> 
+                        Sjekk at applikasjonen har rettigheter til å lese diskinfo
+                    </li>
+                    <li>
+                        <strong>Feil i CPU-data:</strong> 
+                        Kan skyldes begrensninger i containeriserte miljøer
+                    </li>
+                    <li>
+                        <strong>Manglende oppdateringer:</strong> 
+                        Sjekk nettverkstilkobling og at serveren kjører
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

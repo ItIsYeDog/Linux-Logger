@@ -21,7 +21,10 @@
     <div class="dashboard">
         <div class="header-section">
             <h1>System Metrics Dashboard</h1>
-            <p class="refresh-text">Refreshing in <span id="refresh-counter">60</span>s</p>
+            <div class="header-actions">
+                <a href="/docs" class="docs-link">Dokumentasjon</a>
+                <p class="refresh-text">Refreshing in <span id="refresh-counter">60</span>s</p>
+            </div>
         </div>
         
         <div class="metrics-grid">
@@ -53,7 +56,7 @@
                 <p>Platform: <%= systemInfo.platform %></p>
                 <p>Uptime: <%= Math.floor(systemInfo.uptime / 3600) %>h <%= Math.floor((systemInfo.uptime % 3600) / 60) %>m</p>
             </div>
-            
+
             <div class="metric-card disk-usage">
                 <h2>Disk Usage</h2>
                 <% systemInfo.disks.forEach(disk => { %>

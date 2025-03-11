@@ -2,6 +2,7 @@ const express = require('express');
 const systemRoutes = require('./routes/systemRoutes');
 const logsRoutes = require('./routes/logsRoutes');
 const errorHandler = require('./middleware/errorHandler');
+const docsRoutes = require('./routes/docsRoutes');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -22,6 +23,7 @@ async function startServer() {
 
         app.use('/dashboard', systemRoutes);
         app.use('/logs', logsRoutes);
+        app.use('/docs', docsRoutes);
 
         app.use(errorHandler);
 
