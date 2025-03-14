@@ -13,19 +13,21 @@ const logger = winston.createLogger({
         winston.format.json()
     ),
     transports: [
-        // Console logging
         new winston.transports.Console({
             format: winston.format.combine(
                 winston.format.colorize(),
                 winston.format.simple()
-            )
+            ),
+            level: 'warn'
         }),
-        // Error logging
         new winston.transports.File({ 
             filename: 'logs/error.log', 
-            level: 'error' 
+            level: 'error'
         }),
-        // System metrics logging
+        new winston.transports.File({
+            filename: 'logs/warnings.log',
+            level: 'warn'
+        }),
         new winston.transports.File({ 
             filename: 'logs/metrics.log',
             level: 'info'

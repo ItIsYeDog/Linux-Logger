@@ -1,6 +1,20 @@
 const os = require('os');
 const logger = require('./logger');
 const si = require('systeminformation');
+const { checkThresholds } = require('./thresholdChecker');
+
+
+let lastLogTime = 0;
+function shouldLogMetrics() {
+    const now = Date.now();
+    const FIVE_MINUTES = 5 * 60 * 1000;
+    
+    if (now - lastLogTime >= FIVE_MINUTES) {
+        lastLogTime = now;
+        return true;
+    }
+    return false;
+}
 
 exports.getSystemMetrics = async () => {
     try {
@@ -66,7 +80,18 @@ exports.getSystemMetrics = async () => {
             timestamp: new Date().toISOString()
         };
 
-        logger.info('System Metrics', { metrics });
+        checkThresholds(metrics);
+
+        if (shouldLogMetrics()) {
+            logger.info('System Metrics Summary', {
+                cpuLoad: `${metrics.cpuLoad.toFixed(2)}%`,
+                memoryUsed: `${((metrics.totalMemory - metrics.freeMemory) / metrics.totalMemory * 100).toFixed(2)}%`,
+                uptime: `${Math.floor(metrics.uptime / 3600)}h ${Math.floor((metrics.uptime % 3600) / 60)}m`,
+                timestamp: metrics.timestamp
+            });
+        }
+
+        //logger.info('System Metrics', { metrics });
         return metrics;
     } catch (error) {
         logger.error('Error getting system metrics', { error: error.message });

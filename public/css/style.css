@@ -1,11 +1,9 @@
-/* Base styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     background-color: #f0f2f5;
 }
 
-/* Dashboard layout */
 .dashboard {
     max-width: 1200px;
     margin: 0 auto;
@@ -56,7 +54,6 @@ body {
     color: #666;
 }
 
-/* Memory usage */
 .memory-bar {
     width: 100%;
     height: 20px;
@@ -72,7 +69,6 @@ body {
     transition: width 0.3s ease;
 }
 
-/* Disk performance section */
 .disk-performance {
     grid-column: 1 / -1;
 }
@@ -111,7 +107,6 @@ body {
     color: #666;
 }
 
-/* Documentation styles */
 .docs-container {
     max-width: 1000px;
     margin: 0 auto;
@@ -138,7 +133,6 @@ body {
     border-bottom: 2px solid #4CAF50;
 }
 
-/* Links and buttons */
 .docs-link, .nav-link {
     text-decoration: none;
     color: #4CAF50;
@@ -153,7 +147,6 @@ body {
     color: white;
 }
 
-/* Error page */
 .error-container {
     max-width: 800px;
     margin: 50px auto;
@@ -173,7 +166,6 @@ body {
     border-radius: 4px;
 }
 
-/* Logs page */
 .logs-container {
     max-width: 1200px;
     margin: 20px auto;
@@ -217,4 +209,59 @@ body {
 
 .log-content.active {
     display: block;
+}
+
+.log-entry {
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 6px;
+    background: #f8f9fa;
+}
+
+.cpu-warning {
+    border-left: 4px solid #ffc107;
+    background: #fff8e1;
+}
+
+.memory-warning {
+    border-left: 4px solid #f44336;
+    background: #ffebee;
+}
+
+.disk-warning {
+    border-left: 4px solid #ff9800;
+    background: #fff3e0;
+}
+
+.summary {
+    border-left: 4px solid #4CAF50;
+    background: #f1f8e9;
+}
+
+.log-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.timestamp {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.warning-type {
+    color: #d32f2f;
+}
+
+.log-details {
+    margin-left: 10px;
+    font-size: 0.95em;
+}
+
+.no-logs {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
 }

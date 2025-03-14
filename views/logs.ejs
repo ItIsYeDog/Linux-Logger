@@ -4,35 +4,61 @@
     <title>System Logs</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-<body style="display: block;">
+<body>
     <div class="logs-container">
-        <h1>System Logs</h1>
+        <div class="header-section">
+            <h1>System Logs</h1>
+            <a href="/dashboard" class="nav-link">← Tilbake til Dashboard</a>
+        </div>
+        
         <div class="tab-container">
-            <button class="tab active" onclick="showTab('metrics')">Metrics Logs</button>
-            <button class="tab" onclick="showTab('errors')">Error Logs</button>
+            <button class="tab active" onclick="showTab('warnings')">Advarsler</button>
+            <button class="tab" onclick="showTab('summary')">System Oppsummering</button>
         </div>
 
-        <div id="metrics" class="log-content active">
+        <div id="warnings" class="log-content active">
             <div class="log-section">
-                <h2>Metrics Logs</h2>
-                <% metrics.reverse().forEach(log => { %>
-                    <div class="log-entry">
-                        <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
-                        <pre><%= JSON.stringify(log, null, 2) %></pre>
+                <h2>System Advarsler</h2>
+                <% errors.filter(log => log.level === 'warn').forEach(log => { %>
+                    <div class="log-entry <%= log.message.includes('High CPU') ? 'cpu-warning' : 
+                                           log.message.includes('High Memory') ? 'memory-warning' : 
+                                           log.message.includes('High Disk') ? 'disk-warning' : '' %>">
+                        <div class="log-header">
+                            <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
+                            <span class="warning-type"><%= log.message %></span>
+                        </div>
+                        <div class="log-details">
+                            <% Object.entries(log).forEach(([key, value]) => { 
+                                if (key !== 'timestamp' && key !== 'level' && key !== 'message') { %>
+                                <p><strong><%= key %>:</strong> <%= value %></p>
+                            <% }}) %>
+                        </div>
                     </div>
                 <% }); %>
+                <% if (errors.filter(log => log.level === 'warn').length === 0) { %>
+                    <p class="no-logs">Ingen advarsler registrert</p>
+                <% } %>
             </div>
         </div>
 
-        <div id="errors" class="log-content">
+        <div id="summary" class="log-content">
             <div class="log-section">
-                <h2>Error Logs</h2>
-                <% errors.reverse().forEach(log => { %>
-                    <div class="log-entry">
-                        <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
-                        <pre><%= JSON.stringify(log, null, 2) %></pre>
+                <h2>System Oppsummering</h2>
+                <% metrics.filter(log => log.message === 'System Metrics Summary').forEach(log => { %>
+                    <div class="log-entry summary">
+                        <div class="log-header">
+                            <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
+                        </div>
+                        <div class="log-details">
+                            <p><strong>CPU Belastning:</strong> <%= log.cpuLoad %></p>
+                            <p><strong>Minnebruk:</strong> <%= log.memoryUsed %></p>
+                            <p><strong>Oppetid:</strong> <%= log.uptime %></p>
+                        </div>
                     </div>
                 <% }); %>
+                <% if (metrics.filter(log => log.message === 'System Metrics Summary').length === 0) { %>
+                    <p class="no-logs">Ingen oppsummeringer tilgjengelig</p>
+                <% } %>
             </div>
         </div>
     </div>
