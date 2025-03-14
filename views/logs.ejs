@@ -16,17 +16,18 @@
             <button class="tab" onclick="showTab('summary')">System Oppsummering</button>
         </div>
 
+        <!-- Warnings Section -->
         <div id="warnings" class="log-content active">
             <div class="log-section">
                 <h2>System Advarsler</h2>
                 <% if (warnings && warnings.length > 0) { %>
-                    <div class="logs-container">
-                        <% warnings.reverse().slice(0, 10).forEach(warning => { %>
+                    <div class="logs-list" id="warnings-list">
+                        <% warnings.forEach((warning, index) => { %>
                             <div class="log-entry <%= 
                                 warning.message.includes('CPU') ? 'cpu-warning' : 
                                 warning.message.includes('Memory') ? 'memory-warning' : 
                                 warning.message.includes('Disk') ? 'disk-warning' : '' 
-                            %>">
+                            %>" style="<%= index >= 5 ? 'display: none' : '' %>">
                                 <div class="log-header">
                                     <span class="timestamp">
                                         <%= new Date(warning.timestamp).toLocaleString('no-NO') %>
@@ -50,8 +51,10 @@
                                 </div>
                             </div>
                         <% }); %>
-                        <% if (warnings.length > 10) { %>
-                            <button class="show-more-btn" onclick="toggleWarnings()">Vis mer</button>
+                        <% if (warnings.length > 5) { %>
+                            <button class="show-more-btn" onclick="toggleSection('warnings', <%= warnings.length %>)">
+                                Vis mer (<%= warnings.length - 5 %> flere)
+                            </button>
                         <% } %>
                     </div>
                 <% } else { %>
@@ -60,16 +63,14 @@
             </div>
         </div>
 
+        <!-- Summary Section -->
         <div id="summary" class="log-content">
             <div class="log-section">
                 <h2>System Oppsummering</h2>
-                <% 
-                    const summaries = metrics.filter(log => log.message === 'System Metrics Summary');
-                    if (summaries.length > 0) { 
-                %>
-                    <div class="logs-container">
-                        <% summaries.reverse().slice(0, 10).forEach(log => { %>
-                            <div class="log-entry summary">
+                <% if (metrics && metrics.length > 0) { %>
+                    <div class="logs-list" id="summary-list">
+                        <% metrics.forEach((log, index) => { %>
+                            <div class="log-entry summary" style="<%= index >= 5 ? 'display: none' : '' %>">
                                 <div class="log-header">
                                     <span class="timestamp">
                                         <%= new Date(log.timestamp).toLocaleString('no-NO') %>
@@ -82,8 +83,10 @@
                                 </div>
                             </div>
                         <% }); %>
-                        <% if (summaries.length > 10) { %>
-                            <button class="show-more-btn" onclick="toggleSummaries()">Vis mer</button>
+                        <% if (metrics.length > 5) { %>
+                            <button class="show-more-btn" onclick="toggleSection('summary', <%= metrics.length %>)">
+                                Vis mer (<%= metrics.length - 5 %> flere)
+                            </button>
                         <% } %>
                     </div>
                 <% } else { %>
@@ -94,52 +97,60 @@
     </div>
 
     <script>
-        let showingAllWarnings = false;
-        let showingAllSummaries = false;
+        // Track expanded state
+        const sectionStates = {
+            warnings: { expanded: false, total: <%= warnings ? warnings.length : 0 %> },
+            summary: { expanded: false, total: <%= metrics ? metrics.length : 0 %> }
+        };
 
-        function toggleWarnings() {
-            const entries = document.querySelectorAll('#warnings .log-entry');
-            const btn = document.querySelector('#warnings .show-more-btn');
+        // Toggle section visibility
+        function toggleSection(sectionId, totalEntries) {
+            const section = document.getElementById(`${sectionId}-list`);
+            const entries = section.querySelectorAll('.log-entry');
+            const btn = section.querySelector('.show-more-btn');
             
+            sectionStates[sectionId].expanded = !sectionStates[sectionId].expanded;
+            const isExpanded = sectionStates[sectionId].expanded;
+
+            // Toggle entries
             entries.forEach((entry, index) => {
-                if (index >= 10) {
-                    entry.classList.toggle('hidden');
+                if (index >= 5) {
+                    entry.style.display = isExpanded ? 'block' : 'none';
                 }
             });
-            
-            showingAllWarnings = !showingAllWarnings;
-            btn.textContent = showingAllWarnings ? 'Vis mindre' : 'Vis mer';
+
+            // Update button text
+            btn.textContent = isExpanded ? 'Vis mindre' : `Vis mer (${totalEntries - 5} flere)`;
         }
 
-        function toggleSummaries() {
-            const entries = document.querySelectorAll('#summary .log-entry');
-            const btn = document.querySelector('#summary .show-more-btn');
-            
-            entries.forEach((entry, index) => {
-                if (index >= 10) {
-                    entry.classList.toggle('hidden');
-                }
-            });
-            
-            showingAllSummaries = !showingAllSummaries;
-            btn.textContent = showingAllSummaries ? 'Vis mindre' : 'Vis mer';
-        }
-
+        // Switch between tabs
         function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.toLowerCase().includes(tabName.toLowerCase())) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Update content sections
             document.querySelectorAll('.log-content').forEach(content => {
                 content.classList.remove('active');
             });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
             document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
         }
 
-        // Auto-refresh every 30 seconds
+        // Auto refresh
+        const REFRESH_INTERVAL = 30000; // 30 seconds
         setTimeout(() => {
             window.location.reload();
-        }, 30000);
+        }, REFRESH_INTERVAL);
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show first tab by default
+            showTab('warnings');
+        });
     </script>
 </body>
 </html>

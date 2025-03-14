@@ -1,15 +1,27 @@
+/* Base styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     background-color: #f0f2f5;
 }
 
-.dashboard {
+/* Layout containers */
+.dashboard, .logs-container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
 }
 
+.docs-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Header styles */
 .header-section {
     display: flex;
     justify-content: space-between;
@@ -54,6 +66,7 @@ body {
     color: #666;
 }
 
+/* Memory usage bar */
 .memory-bar {
     width: 100%;
     height: 20px;
@@ -69,6 +82,7 @@ body {
     transition: width 0.3s ease;
 }
 
+/* Disk performance section */
 .disk-performance {
     grid-column: 1 / -1;
 }
@@ -107,15 +121,7 @@ body {
     color: #666;
 }
 
-.docs-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
+/* Documentation styles */
 .docs-nav {
     margin-bottom: 30px;
     padding: 10px 0;
@@ -133,6 +139,7 @@ body {
     border-bottom: 2px solid #4CAF50;
 }
 
+/* Navigation links */
 .docs-link, .nav-link {
     text-decoration: none;
     color: #4CAF50;
@@ -147,13 +154,14 @@ body {
     color: white;
 }
 
+/* Error page */
 .error-container {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
     background: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
 }
 
@@ -166,12 +174,7 @@ body {
     border-radius: 4px;
 }
 
-.logs-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
+/* Logs page */
 .log-section {
     background: white;
     padding: 20px;
@@ -181,43 +184,15 @@ body {
 }
 
 .log-entry {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    font-family: monospace;
-    white-space: pre-wrap;
-}
-
-.tab-container {
-    margin-bottom: 20px;
-}
-
-.tab {
-    padding: 10px 20px;
-    border: none;
-    background: #f0f2f5;
-    cursor: pointer;
-}
-
-.tab.active {
-    background: #4CAF50;
-    color: white;
-}
-
-.log-content {
-    display: none;
-}
-
-.log-content.active {
-    display: block;
-}
-
-.log-entry {
     margin-bottom: 15px;
     padding: 15px;
     border-radius: 6px;
     background: #f8f9fa;
+    font-family: monospace;
+    white-space: pre-wrap;
 }
 
+/* Log types */
 .cpu-warning {
     border-left: 4px solid #ffc107;
     background: #fff8e1;
@@ -238,6 +213,7 @@ body {
     background: #f1f8e9;
 }
 
+/* Log components */
 .log-header {
     display: flex;
     justify-content: space-between;
@@ -266,6 +242,39 @@ body {
     padding: 20px;
 }
 
+/* Tab navigation */
+.tab-container {
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    border: none;
+    background: #f0f2f5;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+
+.tab.active {
+    background: #4CAF50;
+    color: white;
+}
+
+.log-content {
+    display: none;
+}
+
+.log-content.active {
+    display: block;
+}
+
+/* Utility classes */
+.hidden {
+    display: none !important;
+}
+
+/* Show more button */
 .show-more-btn {
     display: block;
     width: 100%;
@@ -277,12 +286,9 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .show-more-btn:hover {
     background: #45a049;
-}
-
-.hidden {
-    display: none;
 }
