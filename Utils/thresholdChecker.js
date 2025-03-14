@@ -2,7 +2,7 @@ const logger = require('./logger');
 
 const THRESHOLDS = {
     CPU_LOAD: 25,
-    MEMORY_USAGE: 80,
+    MEMORY_USAGE: 40,
     DISK_USAGE: 90
 };
 
