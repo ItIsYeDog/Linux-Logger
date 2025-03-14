@@ -20,35 +20,40 @@
             <div class="log-section">
                 <h2>System Advarsler</h2>
                 <% if (warnings && warnings.length > 0) { %>
-                    <% warnings.reverse().forEach(warning => { %>
-                        <div class="log-entry <%= 
-                            warning.message.includes('CPU') ? 'cpu-warning' : 
-                            warning.message.includes('Memory') ? 'memory-warning' : 
-                            warning.message.includes('Disk') ? 'disk-warning' : '' 
-                        %>">
-                            <div class="log-header">
-                                <span class="timestamp">
-                                    <%= new Date(warning.timestamp).toLocaleString('no-NO') %>
-                                </span>
-                                <span class="warning-type"><%= warning.message %></span>
+                    <div class="logs-container">
+                        <% warnings.reverse().slice(0, 10).forEach(warning => { %>
+                            <div class="log-entry <%= 
+                                warning.message.includes('CPU') ? 'cpu-warning' : 
+                                warning.message.includes('Memory') ? 'memory-warning' : 
+                                warning.message.includes('Disk') ? 'disk-warning' : '' 
+                            %>">
+                                <div class="log-header">
+                                    <span class="timestamp">
+                                        <%= new Date(warning.timestamp).toLocaleString('no-NO') %>
+                                    </span>
+                                    <span class="warning-type"><%= warning.message %></span>
+                                </div>
+                                <div class="log-details">
+                                    <% if (warning.cpuLoad) { %>
+                                        <p><strong>CPU Belastning:</strong> <%= warning.cpuLoad %></p>
+                                    <% } %>
+                                    <% if (warning.memoryUsage) { %>
+                                        <p><strong>Minnebruk:</strong> <%= warning.memoryUsage %></p>
+                                        <p><strong>Ledig Minne:</strong> <%= warning.freeMemory %></p>
+                                    <% } %>
+                                    <% if (warning.filesystem) { %>
+                                        <p><strong>Filsystem:</strong> <%= warning.filesystem %></p>
+                                        <p><strong>Bruk:</strong> <%= warning.usagePercent %></p>
+                                        <p><strong>Ledig:</strong> <%= warning.available %></p>
+                                    <% } %>
+                                    <p><strong>Terskel:</strong> <%= warning.threshold %></p>
+                                </div>
                             </div>
-                            <div class="log-details">
-                                <% if (warning.cpuLoad) { %>
-                                    <p><strong>CPU Belastning:</strong> <%= warning.cpuLoad %></p>
-                                <% } %>
-                                <% if (warning.memoryUsage) { %>
-                                    <p><strong>Minnebruk:</strong> <%= warning.memoryUsage %></p>
-                                    <p><strong>Ledig Minne:</strong> <%= warning.freeMemory %></p>
-                                <% } %>
-                                <% if (warning.filesystem) { %>
-                                    <p><strong>Filsystem:</strong> <%= warning.filesystem %></p>
-                                    <p><strong>Bruk:</strong> <%= warning.usagePercent %></p>
-                                    <p><strong>Ledig:</strong> <%= warning.available %></p>
-                                <% } %>
-                                <p><strong>Terskel:</strong> <%= warning.threshold %></p>
-                            </div>
-                        </div>
-                    <% }); %>
+                        <% }); %>
+                        <% if (warnings.length > 10) { %>
+                            <button class="show-more-btn" onclick="toggleWarnings()">Vis mer</button>
+                        <% } %>
+                    </div>
                 <% } else { %>
                     <p class="no-logs">Ingen advarsler registrert</p>
                 <% } %>
@@ -58,19 +63,30 @@
         <div id="summary" class="log-content">
             <div class="log-section">
                 <h2>System Oppsummering</h2>
-                <% metrics.filter(log => log.message === 'System Metrics Summary').forEach(log => { %>
-                    <div class="log-entry summary">
-                        <div class="log-header">
-                            <span class="timestamp"><%= new Date(log.timestamp).toLocaleString() %></span>
-                        </div>
-                        <div class="log-details">
-                            <p><strong>CPU Belastning:</strong> <%= log.cpuLoad %></p>
-                            <p><strong>Minnebruk:</strong> <%= log.memoryUsed %></p>
-                            <p><strong>Oppetid:</strong> <%= log.uptime %></p>
-                        </div>
+                <% 
+                    const summaries = metrics.filter(log => log.message === 'System Metrics Summary');
+                    if (summaries.length > 0) { 
+                %>
+                    <div class="logs-container">
+                        <% summaries.reverse().slice(0, 10).forEach(log => { %>
+                            <div class="log-entry summary">
+                                <div class="log-header">
+                                    <span class="timestamp">
+                                        <%= new Date(log.timestamp).toLocaleString('no-NO') %>
+                                    </span>
+                                </div>
+                                <div class="log-details">
+                                    <p><strong>CPU Belastning:</strong> <%= log.cpuLoad %></p>
+                                    <p><strong>Minnebruk:</strong> <%= log.memoryUsed %></p>
+                                    <p><strong>Oppetid:</strong> <%= log.uptime %></p>
+                                </div>
+                            </div>
+                        <% }); %>
+                        <% if (summaries.length > 10) { %>
+                            <button class="show-more-btn" onclick="toggleSummaries()">Vis mer</button>
+                        <% } %>
                     </div>
-                <% }); %>
-                <% if (metrics.filter(log => log.message === 'System Metrics Summary').length === 0) { %>
+                <% } else { %>
                     <p class="no-logs">Ingen oppsummeringer tilgjengelig</p>
                 <% } %>
             </div>
@@ -78,6 +94,37 @@
     </div>
 
     <script>
+        let showingAllWarnings = false;
+        let showingAllSummaries = false;
+
+        function toggleWarnings() {
+            const entries = document.querySelectorAll('#warnings .log-entry');
+            const btn = document.querySelector('#warnings .show-more-btn');
+            
+            entries.forEach((entry, index) => {
+                if (index >= 10) {
+                    entry.classList.toggle('hidden');
+                }
+            });
+            
+            showingAllWarnings = !showingAllWarnings;
+            btn.textContent = showingAllWarnings ? 'Vis mindre' : 'Vis mer';
+        }
+
+        function toggleSummaries() {
+            const entries = document.querySelectorAll('#summary .log-entry');
+            const btn = document.querySelector('#summary .show-more-btn');
+            
+            entries.forEach((entry, index) => {
+                if (index >= 10) {
+                    entry.classList.toggle('hidden');
+                }
+            });
+            
+            showingAllSummaries = !showingAllSummaries;
+            btn.textContent = showingAllSummaries ? 'Vis mindre' : 'Vis mer';
+        }
+
         function showTab(tabName) {
             document.querySelectorAll('.log-content').forEach(content => {
                 content.classList.remove('active');
@@ -89,8 +136,9 @@
             event.target.classList.add('active');
         }
 
+        // Auto-refresh every 30 seconds
         setTimeout(() => {
-        window.location.reload();
+            window.location.reload();
         }, 30000);
     </script>
 </body>

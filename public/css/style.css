@@ -265,3 +265,24 @@ body {
     text-align: center;
     padding: 20px;
 }
+
+.show-more-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.show-more-btn:hover {
+    background: #45a049;
+}
+
+.hidden {
+    display: none;
+}
